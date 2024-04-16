@@ -45,11 +45,15 @@ if (isset($_POST['login'])) {
             if (!empty($row['user_id'])) {
                 $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['email'] = $row['email'];
-                
-                echo "Login successful!";
-                header('Location: index.php');
-                exit; // Ensure no further code is executed after the redirect
-            } else {
+                $_SESSION['is_admin'] = $row['is_admin']; // Store admin status in session
+
+    if ($row['is_admin']) {
+        header('Location: admin_dashboard.php'); // Redirect to admin dashboard if user is an admin
+        exit;
+    } else {
+        header('Location: index.php'); // Redirect to the main page if not an admin
+        exit;
+    }} else {
                 echo "User ID could not be retrieved from the database.";
             }
         } else {
