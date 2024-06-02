@@ -8,6 +8,9 @@ if (empty($_SESSION['cart'])) {
     exit;
 }
 
+// Initialize total price
+$totalPrice = 0;
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['place_order'])) {
      // Check if user_id is set in the session
@@ -18,9 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['place_order'])) {
 
     $userId = $_SESSION['user_id']; // Retrieve user id from session
     $address = $_POST['address']; // Retrieve shipping address from form
-    echo $userId . "dassad";
+   
     // Calculate total price
-    $totalPrice = 0;
     foreach ($_SESSION['cart'] as $id => $item) {
         $totalPrice += $item['price'] * $item['quantity'];
     }
@@ -34,9 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['place_order'])) {
     $_SESSION['order_id'] = $orderId;
     
     // Insert order details
-    foreach ($_SESSION['cart'] as $id => $item) {
+    foreach ($_SESSION['cart'] as $product_id => $item) {
         $stmt = $conn->prepare("INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("iiid", $orderId, $id, $item['quantity'], $item['price']);
+        $stmt->bind_param("iiid", $orderId, $product_id, $item['quantity'], $item['price']);
         $stmt->execute();
     }
 
@@ -47,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['place_order'])) {
     header('Location: order_confirmation.php');
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -70,8 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['place_order'])) {
         <ul>
             <?php foreach ($_SESSION['cart'] as $id => $item): ?>
             <li><?= htmlspecialchars($item['name']) ?>: $<?= number_format($item['price'], 2) ?> x <?= $item['quantity'] ?></li>
-            <?php endforeach; ?>
+            <?php
+            $totalPrice += $item['price'] * $item['quantity'];
+            endforeach; ?>
         </ul>
+        <p><strong>Total Amount: $<?= number_format($totalPrice, 2) ?></strong></p>
         <button type="submit" name="place_order" class="btn btn-primary">Place Order</button>
     </form>
 </div>

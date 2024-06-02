@@ -25,7 +25,8 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
         <div>
             <h2>Manage Products</h2>
             <a href="add_product.php" class="btn btn-primary">Add New Product</a>
-            <a href="edit_product.php" class="btn btn-info">Edit Products</a>
+            <a href="view_product.php" class="btn btn-info">View Products</a>
+            <!-- <a href="edit_product.php" class="btn btn-info">Edit Products</a> -->
         </div>
         <br>
         <div>

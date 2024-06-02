@@ -29,22 +29,22 @@
 </body>
 </html>
 
+
 <?php
-include 'db.php'; // Includes the database connection
+include 'db.php'; // Includes the database connection script.
 
-if (isset($_POST['register'])) {
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+if (isset($_POST['register'])) { // Checks if the form has been submitted.
+    $username = mysqli_real_escape_string($conn, $_POST['username']); // Escapes special characters in the username.
+    $email = mysqli_real_escape_string($conn, $_POST['email']); // Escapes special characters in the email.
+    $password = mysqli_real_escape_string($conn, $_POST['password']); // Escapes special characters in the password.
+    $password = password_hash($password, PASSWORD_DEFAULT); // Hashes the password for security.
 
-    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
-    if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-        header('Location: login.php');
+    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')"; // SQL query to insert new user.
+    if ($conn->query($sql) === TRUE) { // Executes the SQL query.
+        echo "New record created successfully"; // Success message.
+        header('Location: login.php'); // Redirects to the login page.
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $sql . "<br>" . $conn->error; // Error message if the query fails.
     }
 }
 ?>
-

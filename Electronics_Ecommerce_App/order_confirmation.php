@@ -39,12 +39,12 @@ $orderInfo = $orderSummaryResult->fetch_assoc();
     <p>Thank you for your purchase!</p>
     <h4>Order Summary</h4>
     <p>Order Placed: <?= date("F j, Y, g:i a", strtotime($orderInfo['created_at'])) ?></p>
-    <p>Total Price: $<?= number_format($orderInfo['total_price'], 2) ?></p>
     <ul>
         <?php while ($item = $result->fetch_assoc()): ?>
             <li><?= htmlspecialchars($item['name']) ?> - $<?= number_format($item['price'], 2) ?> x <?= $item['quantity'] ?></li>
         <?php endwhile; ?>
     </ul>
+    <p>Total Price: $<?= number_format($orderInfo['total_price'], 2) ?></p>
     <a href="index.php" class="btn btn-primary">Continue Shopping</a>
 </div>
 

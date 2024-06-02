@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="stock" class="form-label">Stock</label>
             <input type="number" class="form-control" id="stock" name="stock" required>
         </div>
-        <button type="submit" class="btn btn-primary">Add Product</button>
+        <button type="submit" name="add_product" class="btn btn-primary">Add Product</button>
     </form>
 </div>
 </body>

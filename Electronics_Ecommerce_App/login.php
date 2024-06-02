@@ -28,41 +28,39 @@
 </html>
 
 <?php
-session_start();
-include 'db.php'; // Includes the database connection
+session_start(); // Starts a new or resumes an existing session
+include 'db.php'; // Includes the database connection script
 
-if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+if (isset($_POST['login'])) { // Checks if the form has been submitted (user clicked the "Login" button)
+    $email = mysqli_real_escape_string($conn, $_POST['email']); // Escapes special characters in the email
+    $password = mysqli_real_escape_string($conn, $_POST['password']); // Escapes special characters in the password
 
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM users WHERE email = '$email'"; // SQL query to retrieve user data based on email
+    $result = $conn->query($sql); // Executes the query
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['password'])) {
-            // Check if the 'id' column is retrieved and not null
-            if (!empty($row['user_id'])) {
-                $_SESSION['user_id'] = $row['user_id'];
-                $_SESSION['email'] = $row['email'];
-                $_SESSION['is_admin'] = $row['is_admin']; // Store admin status in session
+    if ($result->num_rows > 0) { // If user with the given email exists
+        $row = $result->fetch_assoc(); // Fetches the user data
+        if (password_verify($password, $row['password'])) { // Verifies the hashed password
+            if (!empty($row['user_id'])) { // Checks if the 'user_id' column is retrieved and not null
+                $_SESSION['user_id'] = $row['user_id']; // Stores user ID in the session
+                $_SESSION['email'] = $row['email']; // Stores email in the session
+                $_SESSION['is_admin'] = $row['is_admin']; // Stores admin status in the session
 
-    if ($row['is_admin']) {
-        header('Location: admin_dashboard.php'); // Redirect to admin dashboard if user is an admin
-        exit;
-    } else {
-        header('Location: index.php'); // Redirect to the main page if not an admin
-        exit;
-    }} else {
+                if ($row['is_admin']) {
+                    header('Location: admin_dashboard.php'); // Redirects to admin dashboard if user is an admin
+                    exit;
+                } else {
+                    header('Location: index.php'); // Redirects to the main page if not an admin
+                    exit;
+                }
+            } else {
                 echo "User ID could not be retrieved from the database.";
             }
         } else {
-            echo "Invalid password!";
+            echo "Invalid password!"; // Incorrect password
         }
     } else {
-        echo "No user found with that email address!";
+        echo "No user found with that email address!"; // User not found
     }
 }
 ?>
-
-

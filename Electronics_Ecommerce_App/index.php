@@ -35,9 +35,13 @@ if (isset($_POST['add_to_cart'])) {
     }
 }
 
-$sql = "SELECT * FROM products WHERE stock > 0"; // Fetch products with stock available
+// Fetch products with stock available
+$sql = "SELECT * FROM products WHERE stock > 0";
 $result = $conn->query($sql);
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
